@@ -5,7 +5,6 @@ from webdriver_manager.firefox import GeckoDriverManager
 import getpass as getpass
 import pyautogui as gui
 
-
 import time as time
 
 
@@ -21,7 +20,8 @@ driver = webdriver.Chrome(service = Service(GeckoDriverManager().install()),
 
 driver.get("https://comedores.unr.edu.ar/comedor-reserva/reservar")
 
-driver.maximize_window()
+driver.minimize_window()
+
 
 # links = driver.find_elements("xpath", "//a[@href]")
 enter_username = driver.find_element("name", "form-login[dni]")
@@ -35,126 +35,107 @@ submit_keys = driver.find_element("name", "botones[botonEnviar]")
 enter_username.send_keys(user)
 enter_password.send_keys(password)
 submit_keys.click()
+time.sleep(5)
 
 
-# comedor = "Comedor Universitario Área Salud"
+# def reservar(comedor, dias, hora):
 
-# driver.find_element("xpath",
-#                     "//div[contains(@class, 'card card-block reservar-comedor card-filtros grow animated fadeIn faster')][.//h2[text()[contains(., 'Comedor Universitario Área Salud')]]]")
+#     salud = driver.find_elements("xpath",
+#                                 "//h2[@class='reservar-comedor-nombre' and contains(text(),'Comedor Universitario Área "+comedor+"')]")
+#     driver.execute_script("arguments[0].click()", salud[-1])
 
-# reservar-comedor-nombre
+#     horario_noche = []
+#     for dia in dias:
+#         salir = []
+#         while horario_noche == []:
+#             horario_noche = driver.find_elements("xpath",
+#                                                  "//*[@class='reservar-servicio-horario-desde' and contains(text(),'"+ hora +"')]")
+#             time.sleep(0.25)
+#         driver.execute_script("arguments[0].click()", horario_noche[-1])
+#         time.sleep(6)
+#         comida = []
+#         while comida == []:
+#             comida = driver.find_elements("xpath",
+#                                           "//div[@class='calendario-dia calendario-dia-clickeable' and contains(.,'"+dia+"')]/div[@class='calendario-dia-turno']")
+#             time.sleep(0.1)
+#         time.sleep(0.15)
+#         driver.execute_script("arguments[0].click()", comida[-1])
+#         print("Encontró el botón de comida")
+#         time.sleep(0.15)
+#         aceptar = driver.find_elements("xpath",
+#                                           "//button[@class='swal2-confirm swal2-styled']")
+#         driver.execute_script("arguments[0].click()", aceptar[-1])
 
-# Comedor Universitario Área Salud
+#         print("arrancó el while")
+#         while True:
+#             time.sleep(1.35)
+#             salir = driver.find_elements("xpath",
+#                                          "//button[@class='ticket-iframe-cerrar reservar-ticket-iframe-cerrar']")
+#             if salir != []:
+#                 driver.execute_script("arguments[0].click()", salir[-1])
+#                 break
+#             driver.execute_script("arguments[0].click()", comida[-1])
+#             time.sleep(0.25)
+#             aceptar = []
+#             while aceptar == []:
+#                 aceptar = driver.find_elements("xpath",
+#                                                "//button[@class='swal2-confirm swal2-styled']")
+            
+#             driver.execute_script("arguments[0].click()", aceptar[-1])
+#         print("Terminó con "+dia)
 
-# salud = driver.find_element("xpath",
-#                               "//*[@id='reservar']/div[2]/div[3]/div/div[2]/button")
+#     return None
 
-# time.sleep(1)
-# salud = driver.find_element("xpath",
-#                               "//h2[@class='reservar-comedor-nombre' and contains(text(),'Comedor Universitario Área Salud')]")
+def reservar_unico(comedor, dia, hora):
 
-
-# salud.click()
-
-# time.sleep(1)
-
-# horario_noche = driver.find_elements("xpath",
-#                                     "//*[@class='reservar-servicio-horario-desde']")
-                                    
-# horario_noche = driver.find_element("xpath",
-#                                     "//*[@class='reservar-servicio-horario-desde' and contains(text(),'20:00')]")
-# horario_noche.click()
-# time.sleep(2)
-
-
-
-# for i in horario_noche:
-#     print(i)
-
-# print(horario_noche)
-# lala = driver.find_elements("xpath", 
-#                            "//div[@class = 'calendario-dia calendario-dia-clickeable']/span[contains(text(), 'lunes')]")
-
-
-
-# lista = driver.find_element("xpath",
-#                             "//div[@class='calendario-dia calendario-dia-clickeable' and ./div[@class='calendario-dia-cabecera' and ./span[contains(text(),'lunes')]]]/div[@class='calendario-dia-turno']")
-
-# horario_noche = driver.find_elements("xpath",
-#                                     "//div[@class='calendario-dia calendario-dia-clickeable' and contains(.,'martes')]/div[@class='calendario-dia-turno']")
-
-# for i in horario_noche:
-#     print(i)
-
-# horario_noche[0].click()
-
-# for i in lista:
-#     print(i)
-
-# print(lista)
-
-# lista.click()
-# for i in lala:
-#     print(i)
-
-# print(lala)
-# driver.get("https://comedores.unr.edu.ar/comedor-reserva/reservar")
-
-
-# for i in comedor:
-#     print(i)
-
-
-def reservar_noche():
-
-    time.sleep(1)
-    salud = driver.find_element("xpath",
-                                "//h2[@class='reservar-comedor-nombre' and contains(text(),'Comedor Universitario Área Centro')]")
-    salud.click()
+    salud = driver.find_elements("xpath",
+                                 "//h2[@class='reservar-comedor-nombre' and contains(text(),'Comedor Universitario Área "+comedor+"')]")
+    driver.execute_script("arguments[0].click()", salud[-1])
 
     horario_noche = []
-    for dia in ["martes"]:
-        salir = []
-        while horario_noche == []:
-            horario_noche = driver.find_elements("xpath",
-                                                 "//*[@class='reservar-servicio-horario-desde' and contains(text(),'"+"14:00"+"')]")
-            time.sleep(0.25)
-        horario_noche[-1].click()
-        time.sleep(6)
-        comida = []
-        while comida == []:
-            comida = driver.find_elements("xpath",
-                                          "//div[@class='calendario-dia calendario-dia-clickeable' and contains(.,'"+dia+"')]/div[@class='calendario-dia-turno']")
-            time.sleep(0.1)
-        time.sleep(0.15)
+    salir = []
+    while horario_noche == []:
+        horario_noche = driver.find_elements("xpath",
+                                             "//*[@class='reservar-servicio-horario-desde' and contains(text(),'"+ hora +"')]")
+        time.sleep(0.25)
+    driver.execute_script("arguments[0].click()", horario_noche[-1])
+    time.sleep(5)
+    comida = []
+    while comida == []:
+        comida = driver.find_elements("xpath",
+                                      "//div[@class='calendario-dia calendario-dia-clickeable' and contains(.,'"+dia+"')]/div[@class='calendario-dia-turno']")
+        time.sleep(0.1)
+    time.sleep(0.15)
+    driver.execute_script("arguments[0].click()", comida[-1])
+    print("Reservando...")
+    time.sleep(0.15)
+    aceptar = driver.find_elements("xpath",
+                                      "//button[@class='swal2-confirm swal2-styled']")
+    driver.execute_script("arguments[0].click()", aceptar[-1])
+    print("No hay cupos. Intentando hasta conseguir")
+    while True:
+        time.sleep(1.35)
+        salir = driver.find_elements("xpath",
+                                     "//button[@class='ticket-iframe-cerrar reservar-ticket-iframe-cerrar']")
+        if salir != []:
+            driver.execute_script("arguments[0].click()", salir[-1])
+            break
         driver.execute_script("arguments[0].click()", comida[-1])
-        print("Encontró el botón de comida")
-        time.sleep(0.15)
-        aceptar = driver.find_elements("xpath",
-                                          "//button[@class='swal2-confirm swal2-styled']")
+        time.sleep(0.25)
+        aceptar = []
+        while aceptar == []:
+            aceptar = driver.find_elements("xpath",
+                                           "//button[@class='swal2-confirm swal2-styled']")
+          
         driver.execute_script("arguments[0].click()", aceptar[-1])
-
-        print("arrancó el while")
-        while True:
-            time.sleep(1)
-            salir = driver.find_elements("xpath",
-                                         "//button[@class='ticket-iframe-cerrar reservar-ticket-iframe-cerrar']")
-            if salir != []:
-                driver.execute_script("arguments[0].click()", salir[-1])
-                break
-            driver.execute_script("arguments[0].click()", comida[-1])
-            time.sleep(0.1)
-            aceptar = []
-            while aceptar == []:
-                aceptar = driver.find_elements("xpath",
-                                               "//button[@class='swal2-confirm swal2-styled']")
-            
-            driver.execute_script("arguments[0].click()", aceptar[-1])
-        print("Terminó con "+dia)
-
-
+    print("Comida reservada el día "+ dia + " a las " + hora +"hs.")
+    driver.close() # De momento esto funciona bien
+    # driver.get("https://comedores.unr.edu.ar/comedor-reserva/reservar") NO BORRAR. Servirá más adelante...
     return None
 
 
-"@class='ticket-iframe-cerrar reservar-ticket-iframe-cerrar'"
-reservar_noche()
+dia = "viernes"
+hora = "13:00"
+comedor = "Centro"
+
+reservar_unico(comedor, dia, hora)
