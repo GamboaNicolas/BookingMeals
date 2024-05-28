@@ -1,5 +1,5 @@
 import customtkinter as ctk 
-import tkinter.messagebox as tkmb
+# import tkinter as tk
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
@@ -10,7 +10,10 @@ import time as time
 options = Options()
 # options.set_preference("detach", True)
 # options.experimental_options("detach", True)
-# dia = "viernes"
+dias = ["lunes", "martes","miércoles", "jueves", "viernes"]
+horas = ["11:00(Llevar)", "12:00", "13:00", "14:00", "12:00(Llevar)", "13:00(Llevar)", "14:00(Llevar)", "19:30(Llevar)", "19:30", "20:00"]
+comedores = ["Salud", "Centro", "FCEIA", "Siberia", "AGROTECNICA", "Zavalla", "Casilda"]
+# dias = ["lunes"]
 # hora = "20:00"
 # comedor = "Salud"
 # Selecting GUI theme - dark, light , system (for system default) 
@@ -20,11 +23,18 @@ ctk.set_appearance_mode("dark")
 ctk.set_default_color_theme("blue")
 
 app = ctk.CTk() 
-app.geometry("800x400") 
+# app.geometry("1300x600") 
+
 app.title("BookingMeals by Nicolas Gamboa")
 # def reservar_unico():
 
-def reservar_unico(driver, comedor, dia, hora):
+def reservar_unico(driver, comedor, dia, hora, llevar):
+
+    if(llevar):
+        indice_llevar = 0
+    else:
+        indice_llevar = -1
+
     lugar = driver.find_elements("xpath",
                                  "//h2[@class='reservar-comedor-nombre' and contains(text(),'Comedor Universitario Área "+comedor+"')]")
     driver.execute_script("arguments[0].click()", lugar[-1])
@@ -35,7 +45,7 @@ def reservar_unico(driver, comedor, dia, hora):
         horario_noche = driver.find_elements("xpath",
                                              "//*[@class='reservar-servicio-horario-desde' and contains(text(),'"+ hora +"')]")
         time.sleep(0.25)
-    driver.execute_script("arguments[0].click()", horario_noche[-1])
+    driver.execute_script("arguments[0].click()", horario_noche[indice_llevar])
     time.sleep(5)
     comida = []
     while comida == []:
@@ -51,7 +61,7 @@ def reservar_unico(driver, comedor, dia, hora):
     driver.execute_script("arguments[0].click()", aceptar[-1])
     print("No hay cupos. Intentando hasta conseguir")
     while True:
-        time.sleep(1.35)
+        time.sleep(0.7)
         salir = driver.find_elements("xpath",
                                      "//button[@class='ticket-iframe-cerrar reservar-ticket-iframe-cerrar']")
         if salir != []:
@@ -66,8 +76,10 @@ def reservar_unico(driver, comedor, dia, hora):
           
         driver.execute_script("arguments[0].click()", aceptar[-1])
     print("Comida reservada el día "+ dia + " a las " + hora +"hs.")
-    driver.close() # De momento esto funciona bien
-    # driver.get("https://comedores.unr.edu.ar/comedor-reserva/reservar") NO BORRAR. Servirá más adelante...
+    # driver.close() # De momento esto funciona bien
+    driver.get("https://comedores.unr.edu.ar/comedor-reserva/reservar")
+    time.sleep(3)
+
 
 
 
@@ -76,7 +88,9 @@ def reservar():
     dni = user_entry.get()
     password = user_pass.get()
 
-  # app.destroy()
+    # print(checkbox_vars["lunes"]["12:00"].get()) esto fue épico
+
+    app.destroy()
     
     if checkbox.get():
         options.add_argument("--headless")
@@ -95,34 +109,73 @@ def reservar():
     
     submit_keys.click()
     time.sleep(5)
-    reservar_unico(driver, "Salud", "viernes", "20:00")
+
+    # reservar_unico(driver, "Centro", "martes", "14:00", llevar = False)
+
+    for dia in dias:
+        for hora in horas:
+            comedor = checkbox_vars[dia][hora].get()
+            if comedor == "No reservar":
+                next
+            if hora.endswith("(Llevar)"):
+                para_llevar = True
+                hora = hora[:5]
+            reservar_unico(driver, comedor, dia, hora, llevar = para_llevar)
+            
+            
+    # for dia in dias:
+    #reservar_unico(driver, "Salud", dia, "12:00")
 
 
 
-
-# label = ctk.CTkLabel(app,text="") 
-
-# label.pack(pady=20) 
+container = ctk.CTkFrame(master=app)
+container.pack(fill="both", expand=True)
 
 
-frame = ctk.CTkFrame(master=app) 
-frame.pack(pady=20,padx=40,fill='both',expand=True) 
+# Crear el marco principal de la aplicación dentro del scrollable_frame
+frame = ctk.CTkFrame(master=container)
+frame.pack(pady=20, padx=40, fill='both', expand=True)
 
-label = ctk.CTkLabel(master=frame,text='BookingMeals') 
-label.pack(pady=12,padx=10) 
+label = ctk.CTkLabel(master=frame, text='BookingMeals')
+label.grid(row=0, column=0, columnspan=len(horas)+1, pady=12, padx=40)
 
+user_entry = ctk.CTkEntry(master=frame, placeholder_text="DNI")
+user_entry.grid(row=1, column=0, columnspan=len(horas)+1, pady=12, padx=10)
 
-user_entry= ctk.CTkEntry(master=frame,placeholder_text="DNI") 
-user_entry.pack(pady=12,padx=10) 
+user_pass = ctk.CTkEntry(master=frame, placeholder_text="Password", show="*")
+user_pass.grid(row=2, column=0, columnspan=len(horas)+1, pady=12, padx=10)
 
-user_pass= ctk.CTkEntry(master=frame,placeholder_text="Password",show="*") 
-user_pass.pack(pady=12,padx=10) 
+button = ctk.CTkButton(master=frame, text='Login', command=reservar)
+button.grid(row=3, column=0, columnspan=len(horas)+1, pady=12, padx=10)
 
+checkbox = ctk.CTkCheckBox(master=frame, text='Ocultar navegador')
+checkbox.grid(row=4, column=0, columnspan=len(horas)+1, pady=12, padx=10)
 
-button = ctk.CTkButton(master=frame,text='Login',command=reservar) 
-button.pack(pady=12,padx=10) 
+for i, horario in enumerate(horas):
+    label_dia = ctk.CTkLabel(master=frame, text=horario)
+    label_dia.grid(row=5, column=i+1, padx=10, pady=10)
 
-checkbox = ctk.CTkCheckBox(master=frame,text='Ocultar navegador') 
-checkbox.pack(pady=12,padx=10) 
+# Crear una grilla de checkboxes para los días y horas
+checkbox_vars = {dia: {} for dia in dias}
+
+# for i, dia in enumerate(dias):
+#     label_dia = ctk.CTkLabel(master=frame, text=dia.capitalize())
+#     label_dia.grid(row=i+5, column=0, padx=10, pady=10)
+#     for j, hora in enumerate(horas):
+#         var = ctk.BooleanVar()
+#         checkbox_vars[dia][hora] = var
+#         chk = ctk.CTkCheckBox(master=frame, text=hora, variable=var)
+#         chk.grid(row=i+5, column=j+1, padx=5, pady=5)
+
+for i, dia in enumerate(dias):
+    label_dia = ctk.CTkLabel(master=frame, text=dia.capitalize())
+    label_dia.grid(row=i+6, column=0, padx=10, pady=10)
+    for j, hora in enumerate(horas):
+        var = ctk.StringVar(value = "No reservar")
+        checkbox_vars[dia][hora] = var
+        chk = ctk.CTkOptionMenu(master=frame, 
+                              values=["No reservar"]+comedores, 
+                              variable = var, width= 70)
+        chk.grid(row=i+6, column=j+1, padx=5, pady=5)
 
 app.mainloop()
