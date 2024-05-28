@@ -29,6 +29,10 @@ app.title("BookingMeals by Nicolas Gamboa")
 # def reservar_unico():
 
 def reservar_unico(driver, comedor, dia, hora, llevar):
+    dia
+    hora
+    comedor
+    type(comedor)
 
     if(llevar):
         indice_llevar = 0
@@ -61,7 +65,7 @@ def reservar_unico(driver, comedor, dia, hora, llevar):
     driver.execute_script("arguments[0].click()", aceptar[-1])
     print("No hay cupos. Intentando hasta conseguir")
     while True:
-        time.sleep(0.7)
+        time.sleep(1)
         salir = driver.find_elements("xpath",
                                      "//button[@class='ticket-iframe-cerrar reservar-ticket-iframe-cerrar']")
         if salir != []:
@@ -115,12 +119,24 @@ def reservar():
     for dia in dias:
         for hora in horas:
             comedor = checkbox_vars[dia][hora].get()
-            if comedor == "No reservar":
-                next
+            
             if hora.endswith("(Llevar)"):
                 para_llevar = True
                 hora = hora[:5]
-            reservar_unico(driver, comedor, dia, hora, llevar = para_llevar)
+            else:
+                para_llevar = False
+            if (comedor != "No reservar"):
+                # print(dia)
+                # print(hora)
+                # print(comedor)
+                # print(para_llevar)
+                reservar_unico(driver,
+                               comedor=comedor,
+                               dia=dia,
+                               hora=hora, 
+                               llevar=para_llevar)
+                
+                
             
             
     # for dia in dias:
