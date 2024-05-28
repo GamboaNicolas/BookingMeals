@@ -1,5 +1,5 @@
 # BookingMeals
-Una aplicación sencilla para reservar comidas en !["https://comedores.unr.edu.ar"]("https://comedores.unr.edu.ar")  
+Una aplicación sencilla para reservar comidas en !["https://comedores.unr.edu.ar"](https://comedores.unr.edu.ar)  
 Requiere una cuenta creada en el sistema.
 
 # Requisitos
