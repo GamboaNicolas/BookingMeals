@@ -8,6 +8,10 @@ Una aplicación sencilla para reservar comidas en https://comedores.unr.edu.ar
 Requiere una cuenta creada en el sistema.
 
 # Utilización
+Ejecutar el archivo "app.py" en la terminal. Por ejemplo:  
+
+`> python3 app.py`
+
 
 # Requisitos
 
