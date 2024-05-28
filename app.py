@@ -8,22 +8,23 @@ import getpass as getpass
 import time as time
 
 options = Options()
-# options.set_preference("detach", True)
-# options.experimental_options("detach", True)
+
 dias = ["lunes", "martes","miércoles", "jueves", "viernes"]
 horas = ["11:00(Llevar)", "12:00", "13:00", "14:00", "12:00(Llevar)", "13:00(Llevar)", "14:00(Llevar)", "19:30(Llevar)", "19:30", "20:00"]
 comedores = ["Salud", "Centro", "FCEIA", "Siberia", "AGROTECNICA", "Zavalla", "Casilda"]
-# dias = ["lunes"]
-# hora = "20:00"
-# comedor = "Salud"
-# Selecting GUI theme - dark, light , system (for system default) 
+
 ctk.set_appearance_mode("dark") 
 
 # Selecting color theme - blue, green, dark-blue 
 ctk.set_default_color_theme("blue")
 
 app = ctk.CTk() 
+
+
 # app.geometry("1300x600") 
+# app.wm_attributes('-fullscreen', True)
+app.after(0, lambda:app.state('zoomed'))
+
 
 app.title("BookingMeals by Nicolas Gamboa")
 # def reservar_unico():
