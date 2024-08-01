@@ -107,7 +107,6 @@ def reservar():
                 if para_llevar:
                     texto = texto + " para llevar"
                 mensajes.append(texto)
-                # window = tkinter.Tk()
                 # window.after(0, lambda:window.state('zoomed'))
 
     texto_mostrar = "Comidas Reservadas:"
