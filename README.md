@@ -18,7 +18,9 @@ Ejecutar el archivo "app.py" en la terminal. Por ejemplo:
 `BookingMeals` requiere un interprete de python funcional y las librerías costomtkinter, selenium, getpass y time.  
 A su vez requiere tener [Google Chrome](https://www.google.com/chrome) instalado.  
 
-`pip install customtkinter`  
+`pip install customtkinter`
+`pip install webdriver_manager`
+`pip install CTkMessagebox`
 `pip install selenium`  
 `pip install getpass`  
 `pip install time`  
